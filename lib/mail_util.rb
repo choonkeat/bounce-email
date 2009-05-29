@@ -22,6 +22,13 @@ class MailUtil
   end
 
   private
+    def delivery_status_headers
+      if @delivery_status_headers.nil? && @delivery_status_headers = get_embedded_mail(/\/delivery-status/i)
+        @delivery_status_headers = TMail::Mail.parse(@delivery_status_headers.body).header
+      end
+      @delivery_status_headers ||= {}
+    end
+
     def get_original_email
       original = get_embedded_mail(/rfc822/i)
       return original if original
