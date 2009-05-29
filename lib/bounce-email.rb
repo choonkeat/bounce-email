@@ -44,7 +44,7 @@ module BounceEmail
                   return "5.1.1"
               elsif email.match(/unrouteable mail domain|Esta casilla ha expirado por falta de uso/i)
                   return "5.1.2"
-              elsif email.match(/mailbox is full|Mailbox quota usage exceeded|User mailbox exceeds allowed size|Message rejected\. Not enough storage space/i) # AA added 4th or
+              elsif email.match(/mailbox is full|Mailbox quota usage exceeded|User mailbox exceeds allowed size|Message rejected\. Not enough storage space|user is over quota/i) # AA added 4th or
                   if email.match(/This is a permanent error/i) # AA added this
                       return "5.2.2"
                   else
@@ -74,6 +74,8 @@ module BounceEmail
                   return "5.5.4"
               elsif email.match(/550-5\.1\.1|This Gmail user does not exist\./i)
                   return "5.1.1"
+              elsif email.match(/(: 550|Remote host said: 550) (\d\.\d\.\d) /i)
+                  return $2
               elsif email.match(/5.7.1 Your message.*?was blocked by ROTA DNSBL/i) # AA added
                   return "5.7.1"
               elsif email.match(/Technical details of permanent failure/i)  && (email.match(/The recipient server did not accept our requests to connect/i) || email.match(/Connection was dropped by remote host/i) || email.match(/Could not initiate SMTP conversation/i)) # AA added
